@@ -24,17 +24,21 @@ env:
     - TOXENV=d110-py35
     - TOXENV=d110-pypy
 
-    - TOXENV=ddev-py27
-    - TOXENV=ddev-py34
+    - TOXENV=d111-py27
+    - TOXENV=d111-py34
+    - TOXENV=d111-py35
+    - TOXENV=d111-pypy
+
     - TOXENV=ddev-py35
     - TOXENV=ddev-pypy
 
 
 matrix:
   allow_failures:
-    - env: TOXENV=py35-ddev
-    - env: TOXENV=py27-ddev
-    - env: TOXENV=pypy-ddev
+    - env: TOXENV=ddev-py27
+    - env: TOXENV=ddev-py34
+    - env: TOXENV=ddev-py35
+    - env: TOXENV=ddev-pypy
 
 
 install:
