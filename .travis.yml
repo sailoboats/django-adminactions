@@ -8,26 +8,27 @@ cache:
     - $HOME/.cache/pip
 
 env:
-  - TOXENV=py27-d18
-  - TOXENV=py27-d19
-  - TOXENV=py27-d110
-  - TOXENV=py27-ddev
+    - TOXENV=d18-py27
+    - TOXENV=d18-py33
+    - TOXENV=d18-py34
+    - TOXENV=d18-py35
+    - TOXENV=d18-pypy
 
-  - TOXENV=py33-d18
-  - TOXENV=py33-ddev
+    - TOXENV=d19-py27
+    - TOXENV=d19-py34
+    - TOXENV=d19-py35
+    - TOXENV=d19-pypy
 
-  - TOXENV=py34-d18
-  - TOXENV=py34-ddev
+    - TOXENV=d110-py27
+    - TOXENV=d110-py34
+    - TOXENV=d110-py35
+    - TOXENV=d110-pypy
 
-  - TOXENV=py35-d18
-  - TOXENV=py35-d19
-  - TOXENV=py35-d110
-  - TOXENV=py35-ddev
+    - TOXENV=ddev-py27
+    - TOXENV=ddev-py34
+    - TOXENV=ddev-py35
+    - TOXENV=ddev-pypy
 
-  - TOXENV=pypy-d18
-  - TOXENV=pypy-d19
-  - TOXENV=pypy-d110
-  - TOXENV=pypy-ddev
 
 matrix:
   allow_failures:
