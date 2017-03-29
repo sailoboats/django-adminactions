@@ -32,4 +32,7 @@ def test_get_verbose_name():
 def test_flatten():
     from adminactions.utils import flatten
 
-    assert flatten([[[1, 2, 3], (42, None)], [4, 5], [6], 7, (8, 9, 10)]) == [1, 2, 3, 42, None, 4, 5, 6, 7, 8, 9, 10]
+    assert flatten([[[1, 2, 3],
+                     (42, None)],
+                    [4, 5], [6], 7,
+                    (8, 9, 10)]) == [1, 2, 3, 42, None, 4, 5, 6, 7, 8, 9, 10]

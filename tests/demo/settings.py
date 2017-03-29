@@ -9,7 +9,7 @@ here = os.path.dirname(__file__)
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-db = os.environ.get('DBENGINE', None)
+db = os.environ.get('DBENGINE')
 if db == 'pg':
     DATABASES = {
         'default': {

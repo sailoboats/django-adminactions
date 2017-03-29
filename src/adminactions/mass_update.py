@@ -11,7 +11,7 @@ from django import forms
 from django.contrib import messages
 from django.contrib.admin import helpers
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
-from django.db.models import fields as df
+from django.db.models import NOT_PROVIDED, fields as df
 from django.forms import fields as ff
 from django.forms.models import (InlineForeignKeyField,
                                  ModelMultipleChoiceField, construct_instance,
@@ -48,7 +48,7 @@ negate = lambda value: not value
 trim = lambda arg, value: value.strip(arg)
 
 change_domain = lambda arg, value: re.sub('@.*', arg, value)
-change_protocol = lambda arg, value: re.sub('^[a-z]*://', "%s://" % arg, value)
+change_protocol = lambda arg, value: re.sub('^[a-z]*://', "{0}://".format(arg), value)
 
 disable_if_not_nullable = lambda field: field.null
 disable_if_unique = lambda field: not field.unique
@@ -127,22 +127,14 @@ class MassUpdateForm(GenericActionForm):
     _validate = forms.BooleanField(label='Validate',
                                    help_text="if checked use obj.save() instead of manager.update()")
 
-    # _unique_transaction = forms.BooleanField(label='Unique transaction',
-    # required=False,
-    # help_text="If checked create one transaction for the whole update. "
-    #                                                    "If any record cannot be updated everything will be rolled-back")
-
     def __init__(self, *args, **kwargs):
         super(MassUpdateForm, self).__init__(*args, **kwargs)
         self._errors = None
 
-    # def is_valid(self):
-    #    return super(MassUpdateForm, self).is_valid()
-
     def _get_validation_exclusions(self):
         exclude = super(MassUpdateForm, self)._get_validation_exclusions()
         for name, field in list(self.fields.items()):
-            function = self.data.get('func_id_%s' % name, False)
+            function = self.data.get('func_id_{0}'.format(name), False)
             if function:
                 exclude.append(name)
         return exclude
@@ -166,14 +158,14 @@ class MassUpdateForm(GenericActionForm):
         for name, field in list(self.fields.items()):
             raw_value = field.widget.value_from_datadict(self.data, self.files, self.add_prefix(name))
             try:
+                value = NOT_PROVIDED
                 if isinstance(field, ff.FileField):
                     initial = self.initial.get(name, field.initial)
                     value = field.clean(raw_value, initial)
                 else:
                     enabler = 'chk_id_%s' % name
-                    function = self.data.get('func_id_%s' % name, False)
-                    if self.data.get(enabler, False):
-                        # field_object, model, direct, m2m = self._meta.model._meta.get_field_by_name(name)
+                    if self.data.get(enabler):
+                        function = self.data.get('func_id_{0}'.format(name))
                         field_object, model, direct, m2m = get_field_by_name(self._meta.model, name)
                         value = field.clean(raw_value)
                         if function:
@@ -185,10 +177,13 @@ class MassUpdateForm(GenericActionForm):
                             else:
                                 value = func
 
-                        self.cleaned_data[name] = value
-                    if hasattr(self, 'clean_%s' % name):
-                        value = getattr(self, 'clean_%s' % name)()
-                        self.cleaned_data[name] = value
+                    method = 'clean_{0}'.format(name)
+                    if hasattr(self, method):
+                        value = getattr(self, method)()
+
+                if value != NOT_PROVIDED:
+                    self.cleaned_data[name] = value
+
             except ValidationError as e:
                 self._errors[name] = self.error_class(e.messages)
                 if name in self.cleaned_data:
@@ -229,10 +224,10 @@ def mass_update(modeladmin, request, queryset):  # noqa
             record.save()
             updated += 1
         if updated:
-            messages.info(request, _("Updated %s records") % updated)
+            messages.info(request, _("Updated {0} records").format(updated))
 
         if len(errors):
-            messages.error(request, "%s records not updated due errors" % len(errors))
+            messages.error(request, "{0} records not updated due errors".format(len(errors)))
         adminaction_end.send(sender=modeladmin.model,
                              action='mass_update',
                              request=request,
@@ -310,7 +305,7 @@ def mass_update(modeladmin, request, queryset):  # noqa
     else:
         initial.update({'action': 'mass_update', '_validate': 1})
         # form = MForm(initial=initial)
-        prefill_with = request.POST.get('prefill-with', None)
+        prefill_with = request.POST.get('prefill-with')
         prefill_instance = None
         try:
             # Gets the instance directly from the queryset for data security
@@ -342,7 +337,7 @@ def mass_update(modeladmin, request, queryset):  # noqa
     ctx = {'adminform': adminForm,
            'form': form,
            'action_short_description': mass_update.short_description,
-           'title': u"%s (%s)" % (
+           'title': u"{0} ({1})".format(
                mass_update.short_description.capitalize(),
                smart_text(modeladmin.opts.verbose_name_plural),
            ),

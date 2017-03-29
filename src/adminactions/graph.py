@@ -98,7 +98,8 @@ def graph_queryset(modeladmin, request, queryset):  # noqa
                 elif hasattr(modeladmin.model, 'get_%s_display' % field.name):
                     data_labels = []
                     for value, cnt in cc:
-                        data_labels.append(smart_text(dict(field.flatchoices).get(value, value), strings_only=True))
+                        data_labels.append(smart_text(dict(field.flatchoices).get(value, value),
+                                                      strings_only=True))
                 else:
                     data_labels = [str(l) for l, v in cc]
                 data = [v for l, v in cc]

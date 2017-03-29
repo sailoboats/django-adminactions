@@ -29,7 +29,7 @@ def test_permission_needed(app, admin, demomodels, action):
     pks = [demomodels[0].pk, demomodels[1].pk]
     with user_grant_permission(admin, ['demo.change_demomodel']):
         res = app.post(url, params=[('action', action),
-                             ('_selected_action', pks)],
+                                    ('_selected_action', pks)],
                        extra_environ={'wsgi.url_scheme': 'https'},
                        user=admin.username,
                        expect_errors=True)
@@ -39,7 +39,7 @@ def test_permission_needed(app, admin, demomodels, action):
 
         with user_grant_permission(admin, [perm]):
             res = app.post(url, params=[('action', action),
-                                 ('_selected_action', pks)],
+                                        ('_selected_action', pks)],
                            extra_environ={'wsgi.url_scheme': 'https'},
                            user=admin.username,
                            expect_errors=True)

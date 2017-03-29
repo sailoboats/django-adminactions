@@ -31,7 +31,8 @@ class MassUpdateTest(SelectRowsMixin, CheckSignalsMixin, WebTestMixin, Transacti
 
     def _run_action(self, steps=2, **kwargs):
         selected_rows = kwargs.pop('selected_rows', self._selected_rows)
-        with user_grant_permission(self.user, ['demo.change_demomodel', 'demo.adminactions_massupdate_demomodel']):
+        with user_grant_permission(self.user, ['demo.change_demomodel',
+                                               'demo.adminactions_massupdate_demomodel']):
             res = self.app.get('/', user='user')
             res = res.click('Demo models')
             if steps >= 1:
@@ -75,7 +76,8 @@ class MassUpdateTest(SelectRowsMixin, CheckSignalsMixin, WebTestMixin, Transacti
         assert not DemoModel.objects.filter(char='bbb').exists()
 
     def test_messages(self):
-        with user_grant_permission(self.user, ['demo.change_demomodel', 'demo.adminactions_massupdate_demomodel']):
+        with user_grant_permission(self.user, ['demo.change_demomodel',
+                                               'demo.adminactions_massupdate_demomodel']):
             res = self._run_action(**{'_clean': 1}).follow()
             messages = [m.message for m in list(res.context['messages'])]
             self.assertTrue(messages)

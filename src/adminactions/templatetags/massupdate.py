@@ -1,4 +1,4 @@
-from __future__ import absolute_import
+from __future__ import absolute_import, unicode_literals
 
 from six.moves import map
 
@@ -34,15 +34,15 @@ def fields_values(d, k):
 @register.simple_tag
 def link_fields_values(d, k):
     """
-    >>> data = {'name1': ['value1.1', 'value1.2'], 'name2': ['value2.1', 'value2.2'], }
-    >>> link_fields_values(data, 'name1')
-    u'<a href="#" class="fastfieldvalue name1 value">value1.1</a>, <a href="#" class="fastfieldvalue name1 value">value1.2</a>'
+    >>> data = {'n1': ['1.1', '1.2'], 'n2': ['2.1', '2.2'], }
+    >>> link_fields_values(data, 'n1')
+    '<a href="#" class="fastfieldvalue n1 value">1.1</a>, <a href="#" class="fastfieldvalue n1 value">1.2</a>'
     """
     ret = []
     for v in d.get(k, []):
         if v == '':  # ignore empty
             continue
-        ret.append('<a href="#" class="fastfieldvalue %s value">%s</a>' % (k, smart_text(v)))
+        ret.append('<a href="#" class="fastfieldvalue {0} value">{1}</a>'.format(k, smart_text(v)))
 
     return mark_safe(", ".join(ret))
 
@@ -52,7 +52,7 @@ def checkbox_enabler(context, field):
     selected = context['selected_fields']
     name = "chk_id_%s" % field.name
     checked = {True: 'checked="checked"', False: ''}[name in selected]
-    return mark_safe('<input type="checkbox" name="%s" %s class="enabler">' % (name, checked))
+    return mark_safe('<input type="checkbox" name="{0}" {1} class="enabler">'.format(name, checked))
 
 
 class SelectOptionsAttribute(widgets.Select):
@@ -73,7 +73,7 @@ class SelectOptionsAttribute(widgets.Select):
                 selected_choices.remove(option_value)
         else:
             selected_html = ''
-        return u'<option%s value="%s"%s>%s</option>' % (
+        return '<option{0} value="{1}"{2}>{3}</option>'.format(
             attrs,
             escape(option_value), selected_html,
             conditional_escape(smart_text(option_label)))
@@ -89,4 +89,4 @@ def field_function(model, form_field):
     for label, (__, param, enabler, __) in list(OPERATIONS.get_for_field(model_object).items()):
         options_attrs[label] = {'class': classes[param], 'label': label}
         choices.append((label, label))
-    return SelectOptionsAttribute(attrs, choices, options_attrs).render("func_id_%s" % form_field.name, "")
+    return SelectOptionsAttribute(attrs, choices, options_attrs).render("func_id_{0}".format(form_field.name), "")

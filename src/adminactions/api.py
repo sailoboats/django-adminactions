@@ -196,7 +196,7 @@ def export_as_csv(queryset, fields=None, header=None,  # noqa
     else:
         buffer_object = response
 
-    dialect = config.get('dialect', None)
+    dialect = config.get('dialect')
     if dialect is not None:
         writer = csv.writer(buffer_object, dialect=dialect)
     else:
@@ -287,7 +287,8 @@ def export_as_xls2(queryset, fields=None, header=None,  # noqa
             for i, fieldname in enumerate(fields):
                 try:
                     f, __, __, __, = compat.get_field_by_name(queryset.model, fieldname)
-                    fmt = xls_options_default.get(f.name, xls_options_default.get(f.__class__.__name__, 'general'))
+                    fmt = xls_options_default.get(f.name,
+                                                  xls_options_default.get(f.__class__.__name__, 'general'))
                     formats[i] = fmt
                 except FieldDoesNotExist:
                     pass
@@ -414,7 +415,8 @@ def export_as_xls3(queryset, fields=None, header=None,  # noqa
             for i, fieldname in enumerate(fields):
                 try:
                     f, __, __, __, = queryset.model._meta.get_field_by_name(fieldname)
-                    pattern = xlsxwriter_options.get(f.name, xlsxwriter_options.get(f.__class__.__name__, 'general'))
+                    pattern = xlsxwriter_options.get(f.name,
+                                                     xlsxwriter_options.get(f.__class__.__name__, 'general'))
                     fmt = book.add_format({'num_format': pattern})
                     formats[fieldname] = fmt
                 except FieldDoesNotExist:
@@ -502,8 +504,6 @@ def export_as_xls3(queryset, fields=None, header=None,  # noqa
             filename = filename or "%s.xls" % queryset.model._meta.verbose_name_plural.lower().replace(" ", "_")
         response = HttpResponse(out.read(),
                                 content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-        # content_type='application/vnd.ms-excel')
-        # response['Content-Disposition'] = six.b('attachment;filename="%s"') % six.b(filename.encode('us-ascii', 'replace'))
         response['Content-Disposition'] = six.b('attachment;filename="%s"' % filename)
         return response
     return out

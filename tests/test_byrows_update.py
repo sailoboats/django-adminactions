@@ -57,7 +57,8 @@ class TestByRowsUpdateAction(WebTestMixin, SelectRowsMixin, TransactionTestCase)
         """
             Count the selected items appear in the action form
         """
-        with user_grant_permission(self.user, ['demo.change_demomodel', 'demo.adminactions_byrowsupdate_demomodel']):
+        with user_grant_permission(self.user, ['demo.change_demomodel',
+                                               'demo.adminactions_byrowsupdate_demomodel']):
             res = self._get_changelist_form_response()
 
             form = res.forms['changelist-form']
@@ -69,7 +70,8 @@ class TestByRowsUpdateAction(WebTestMixin, SelectRowsMixin, TransactionTestCase)
         """
             Check model fields appear in action form for each selected models
         """
-        with user_grant_permission(self.user, ['demo.change_demomodel', 'demo.adminactions_byrowsupdate_demomodel']):
+        with user_grant_permission(self.user, ['demo.change_demomodel',
+                                               'demo.adminactions_byrowsupdate_demomodel']):
             res = self._get_changelist_form_response()
 
             form = res.forms['changelist-form']
@@ -84,7 +86,8 @@ class TestByRowsUpdateAction(WebTestMixin, SelectRowsMixin, TransactionTestCase)
         """
             Modify a value in action form and see if its stored upon form submit
         """
-        with user_grant_permission(self.user, ['demo.change_demomodel', 'demo.adminactions_byrowsupdate_demomodel']):
+        with user_grant_permission(self.user, ['demo.change_demomodel',
+                                               'demo.adminactions_byrowsupdate_demomodel']):
             res = self._get_changelist_form_response()
 
             form = res.forms['changelist-form']

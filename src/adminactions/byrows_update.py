@@ -77,7 +77,7 @@ def byrows_update(modeladmin, request, queryset):  # noqa
         'adminform': adminform,
         'actionform': actionform,
         'action_short_description': byrows_update.short_description,
-        'title': u"%s (%s)" % (
+        'title': u"{0} ({1})".format(
             byrows_update.short_description.capitalize(),
             smart_text(modeladmin.opts.verbose_name_plural),
         ),

@@ -275,10 +275,7 @@ def export_as_fixture(modeladmin, request, queryset):
                                        queryset=queryset,
                                        modeladmin=modeladmin,
                                        form=form)
-            except ActionInterrupted as e:
-                messages.error(request, str(e))
-                return
-            try:
+            # try:
                 _collector = ForeignKeysCollector if form.cleaned_data.get('add_foreign_keys') else FlatCollector
                 c = _collector(None)
                 c.collect(queryset)
@@ -294,6 +291,9 @@ def export_as_fixture(modeladmin, request, queryset):
                 else:
                     filename = None
                 return _dump_qs(form, queryset, c.data, filename)
+            except ActionInterrupted as e:
+                messages.error(request, str(e))
+                return
             except AttributeError as e:
                 messages.error(request, str(e))
                 return HttpResponseRedirect(request.path)

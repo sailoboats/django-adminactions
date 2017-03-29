@@ -22,7 +22,7 @@ def clone_instance(instance, fieldnames=None):
     if fieldnames is None:
         fieldnames = [fld.name for fld in instance._meta.fields]
 
-    new_kwargs = dict([(name, getattr(instance, name)) for name in fieldnames])
+    new_kwargs = {name: getattr(instance, name) for name in fieldnames}
     return instance.__class__(**new_kwargs)
 
 
@@ -78,7 +78,7 @@ def getattr_or_item(obj, name):
         try:
             ret = obj[name]
         except KeyError:
-            raise AttributeError("%s object has no attribute/item '%s'" % (obj.__class__.__name__, name))
+            raise AttributeError("{0} object has no attribute/item '{1}'".format(obj.__class__.__name__, name))
     return ret
 
 
@@ -103,9 +103,9 @@ def get_field_value(obj, field, usedisplay=True, raw_callable=False):
         fieldname = field.name
     else:
         raise ValueError('Invalid value for parameter `field`: Should be a field name or a Field instance ')
-
-    if usedisplay and hasattr(obj, 'get_%s_display' % fieldname):
-        value = getattr(obj, 'get_%s_display' % fieldname)()
+    method = 'get_{0}_display'.format(fieldname)
+    if usedisplay and hasattr(obj, method):
+        value = getattr(obj, method)()
     else:
         value = getattr_or_item(obj, fieldname)
 
@@ -210,8 +210,8 @@ def get_verbose_name(model_or_queryset, field):
     elif type(model_or_queryset) is models.base.ModelBase:
         model = model_or_queryset
     else:
-        raise ValueError('`get_verbose_name` expects Manager, Queryset or Model as first parameter (got %s)' % type(
-            model_or_queryset))
+        raise ValueError('`get_verbose_name` expects Manager, '
+                         'Queryset or Model as first parameter (got {0})'.format(type(model_or_queryset)))
 
     if isinstance(field, six.string_types):
         field = get_field_by_path(model, field)

@@ -17,8 +17,9 @@ def test_mass_update_1(admin_site):
     browser, administrator = admin_site
     browser.find_element_by_link_text("Users").click()
     browser.find_element_by_id("action-toggle").click()
-    browser.find_element_by_xpath("//input[@name='_selected_action' and @value='%s']" % sax.pk).click()  # unselect sax
 
+    # unselect sax
+    browser.find_element_by_xpath("//input[@name='_selected_action' and @value='%s']" % sax.pk).click()
     Select(browser.find_element_by_name("action")).select_by_visible_text("Mass update")
     browser.find_element_by_name("index").click()  # execute
 

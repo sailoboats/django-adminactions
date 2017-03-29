@@ -25,6 +25,7 @@ env:
     - TOXENV=d110-pypy
 
     - TOXENV=ddev-py35
+    - TOXENV=ddev-py36
     - TOXENV=ddev-pypy
 
 
@@ -33,6 +34,7 @@ matrix:
     - env: TOXENV=ddev-py27
     - env: TOXENV=ddev-py34
     - env: TOXENV=ddev-py35
+    - env: TOXENV=ddev-py36
     - env: TOXENV=ddev-pypy
 
 

@@ -89,9 +89,11 @@ class TestExportAsCsv(unittest.TestCase):
         mem.seek(0)
         csv_dump = mem.read()
         if six.PY2:
-            self.assertEqual(csv_dump.decode('utf8'), u'"Field 1";"Field 2"\r\n"1";"4"\r\n"2";"5"\r\n"3";"ӼӳӬԖԊ"\r\n')
+            self.assertEqual(csv_dump.decode('utf8'),
+                             u'"Field 1";"Field 2"\r\n"1";"4"\r\n"2";"5"\r\n"3";"ӼӳӬԖԊ"\r\n')
         else:
-            self.assertEqual(csv_dump, '"Field 1";"Field 2"\r\n"1";"4"\r\n"2";"5"\r\n"3";"ӼӳӬԖԊ"\r\n')
+            self.assertEqual(csv_dump,
+                             '"Field 1";"Field 2"\r\n"1";"4"\r\n"2";"5"\r\n"3";"ӼӳӬԖԊ"\r\n')
 
     def test_dialect(self):
         fields = ['field1', 'field2']

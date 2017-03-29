@@ -131,7 +131,7 @@ pygments_style = 'sphinx'
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-if os.environ.get('READTHEDOCS', None) == 'True':
+if os.environ.get('READTHEDOCS') == 'True':
     html_theme = "default"
 else:
     import sphinx_rtd_theme

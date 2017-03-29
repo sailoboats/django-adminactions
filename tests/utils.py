@@ -218,7 +218,8 @@ def ipaddress(not_valid=None):
     """
         returns a string representing a random ip address
 
-    :param not_valid: if passed must be a list of integers representing valid class A netoworks that must be ignored
+    :param not_valid: if passed must be a list of integers representing
+     valid class A netoworks that must be ignored
     """
     not_valid_class_A = not_valid or []
 

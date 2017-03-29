@@ -182,7 +182,7 @@ def merge(modeladmin, request, queryset):  # noqa
                 'formset': formset,
                 'media': mark_safe(media),
                 'action_short_description': merge.short_description,
-                'title': u"%s (%s)" % (
+                'title': u"{0} ({1})".format(
                     merge.short_description.capitalize(),
                     smart_text(modeladmin.opts.verbose_name_plural),
                 ),
